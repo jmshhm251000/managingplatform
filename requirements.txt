@@ -7,3 +7,7 @@ requests
 flask_cors
 flask_pymongo
 python-json-logger
+google-auth>=2.15
+google-auth-oauthlib>=0.8
+google-api-python-client>=2.70
+llama_index>=0.6.15

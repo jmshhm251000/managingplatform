@@ -4,3 +4,4 @@ flaskr/__pycache__
 flaskr/api/__pycache__
 flaskr/chatbot/__pycache__
 .DS_Store
+credentials.json
