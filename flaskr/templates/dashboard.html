@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Instagram Insights Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 80%;
+      margin: 20px auto;
+    }
+    th, td {
+      border: 1px solid #aaa;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #eee;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <h1>Instagram Insights</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Metric Name</th>
+          <th>Title</th>
+          <th>Description</th>
+          <th>Period</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for metric in insights_response.data %}
+        <tr>
+          <td>{{ metric.name }}</td>
+          <td>{{ metric.title }}</td>
+          <td>{{ metric.description }}</td>
+          <td>{{ metric.period }}</td>
+          <td>{{ metric.total_value.value }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

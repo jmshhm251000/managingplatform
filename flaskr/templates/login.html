@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Access</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  {% if message %}
+    <div class="popup-overlay" onclick="this.style.display='none'">
+      <div class="popup-box">
+        <p>{{ message }}</p>
+        <button onclick="document.querySelector('.popup-overlay').style.display='none'">Confirm</button>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="login-container">
+    <form method="POST" class="login-form">
+      <input
+        type="password"
+        name="key"
+        placeholder="Access Key"
+        required
+      />
+      <button type="submit">Enter</button>
+    </form>
+  </div>
+</body>
+</html>

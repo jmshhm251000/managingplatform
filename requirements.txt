@@ -1,0 +1,9 @@
+flask
+pymongo
+dnspython
+gunicorn
+python-dotenv
+requests
+flask_cors
+flask_pymongo
+python-json-logger

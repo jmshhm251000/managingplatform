@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Documents</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body {
+      all: unset;
+      background-color: #cccaf8;
+      font-family: 'Apple SD Gothic Neo', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      text-align: center;
+      padding: 40px 16px 24px;
+    }
+
+    header h1 {
+      font-size: 28px;
+      font-weight: bold;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin: 0;
+    }
+
+    .table-wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+      max-height: 500px;
+      overflow-y: auto;
+      padding: 0 24px 24px;
+      box-sizing: border-box;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #ffffff;
+      border: 3px solid #4f46e5;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    thead th {
+      background-color: #4f46e5;
+      color: #ffffff;
+      font-weight: 600;
+      padding: 12px;
+      text-align: left;
+    }
+
+    th, td {
+      padding: 12px 16px;
+      border: 1px solid #e0e0e0;
+      text-align: left;
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    p.warning {
+      text-align: center;
+      font-size: 16px;
+      margin-top: 20px;
+      color: #444;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>📄 저장된 문서 목록</h1>
+  </header>
+
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>message_id</th>
+          <th>sender_id</th>
+          <th>recipient_id</th>
+          <th>timestamp</th>
+          <th>message</th>
+          <th>category</th>
+          <th>response</th>
+        </tr>
+      </thead>
+      <tbody id="dm-table-body">
+        <!-- JS will populate here -->
+      </tbody>
+    </table>
+    <div style="text-align: center; margin-top: 16px;">
+      <button onclick="prevPage()" id="prev-btn">⬅️ 이전</button>
+      <span id="page-label">Page 1</span>
+      <button onclick="nextPage()" id="next-btn">다음 ➡️</button>
+    </div>
+  </div>
+
+  <script>
+    let currentPage = 1;
+    let totalPages = 1;
+
+    async function loadPage(page) {
+      const res = await fetch(`/api/dms?page=${page}`);
+      const result = await res.json();
+      const data = result.documents;
+      totalPages = result.total_pages;
+
+      const tbody = document.getElementById("dm-table-body");
+      const label = document.getElementById("page-label");
+      const nextBtn = document.getElementById("next-btn");
+      const prevBtn = document.getElementById("prev-btn");
+
+      tbody.innerHTML = "";
+      label.textContent = `Page ${page} of ${totalPages}`;
+      nextBtn.disabled = page >= totalPages;
+      prevBtn.disabled = page <= 1;
+
+      if (!data.length) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center">⚠️ 더 이상 메시지가 없습니다.</td></tr>`;
+        return;
+      }
+
+      for (const doc of data) {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${doc.message_id?.slice(-10) || ''}</td>
+          <td>${doc.sender_id || ''}</td>
+          <td>${doc.recipient_id || ''}</td>
+          <td>${new Date(doc.timestamp).toLocaleString()}</td>
+          <td>${doc.text || ''}</td>
+          <td>${doc.category || '⏳ 처리중'}</td>
+          <td>${doc.response || '⏳ 처리중'}</td>
+        `;
+        tbody.appendChild(row);
+      }
+    }
+
+    function nextPage() {
+      if (currentPage < totalPages) {
+        currentPage++;
+        loadPage(currentPage);
+      }
+    }
+
+    function prevPage() {
+      if (currentPage > 1) {
+        currentPage--;
+        loadPage(currentPage);
+      }
+    }
+
+    loadPage(currentPage);
+  </script>
+</body>
+</html>
