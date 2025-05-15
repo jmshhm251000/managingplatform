@@ -1,6 +1,6 @@
 # ManagingPlatform
 
-## Overview
+## Overview (Work In Progress)
 
 ManagingPlatform is a Flask-based web application integrating Instagram APIs with a chatbot powered by Large Language Models (LLMs) using the `llama_index` and `Ollama` framework. The app supports secure user login, message history analytics, and knowledge base management with NLP features.
 
