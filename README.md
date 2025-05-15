@@ -25,13 +25,21 @@ ManagingPlatform is a Flask-based web application integrating Instagram APIs wit
   - Test database operations with cloud DB
 
 - Modularize API routes following the **single-responsibility principle**
-  - Break down APIs so each endpoint has one clear purpose, for example:
-    - Authentication/login API
-    - Instagram insights API
-    - Message handling/webhooks API
-    - Chatbot query API
-    - Knowledge base management API
-  - Organize routes using Flask Blueprints or similar modular structures
+  - The current `/dashboard` API endpoint combines multiple distinct features in a single function:
+    - Fetching Facebook Pages linked to the user  
+    - Extracting Instagram Business Account IDs from those pages  
+    - Fetching Instagram insights for the selected Instagram account  
+    - Rendering the dashboard with combined data  
+
+  - This tightly couples different concerns, making the code harder to maintain, test, and extend.
+
+  - To improve, break down this monolithic endpoint into smaller, single-purpose APIs or helper functions, for example:
+    - One API/function to fetch and return Facebook Pages linked to the user  
+    - One API/function to extract and return Instagram Business Account IDs from a given page  
+    - One API/function to fetch Instagram insights data for a given Instagram Business Account ID  
+    - One API to assemble these smaller calls or serve the dashboard view  
+
+  - Organize these logically using Flask Blueprints or modules, so each API endpoint or function focuses on a single responsibility.
 
 - Improve **error handling and logging** in all API modules
   - Add detailed error messages for MongoDB Atlas connection issues
